@@ -32,24 +32,36 @@ void MessageboxCreator::createMenu() { // 创建菜单
     QMenu *qicon_warning_icon = new QMenu();
     QAction *warning_icon = new QAction("显示警告图标", qicon_bar);
     QAction *with_ok_button_48 = new QAction("并显示[确认]按钮", qicon_warning_icon);
-    QAction *with_ok_button_49 = new QAction("并显示[确认]、[取消]按钮", qicon_warning_icon);
+    QAction *with_ok_cancel_button_49 = new QAction("并显示[确认]、[取消]按钮", qicon_warning_icon);
+
+    // 显示信息图标
+    QMenu *qicon_info_icon = new QMenu();
+    QAction *info_icon = new QAction("显示信息图标", qicon_bar);
+    QAction *with_ok_button_64 = new QAction("并显示[确认]按钮", qicon_info_icon);
+    QAction *with_ok_cancel_button_65 = new QAction("并显示[确认]、[取消]按钮", qicon_info_icon);
 
     /* 向图标菜单添加动作 */
-    qicon_bar->addAction(no_icon);
-    qicon_bar->addAction(warning_icon);
+    qicon_bar->addAction(no_icon); // 无图标
+    qicon_bar->addAction(warning_icon); // 警告图标
+    qicon_bar->addAction(info_icon); // 信息图标
 
     /* 向按钮菜单添加动作 */
     // 无图标
     qicon_no_icon->addAction(with_ok_button_0);
     qicon_no_icon->addAction(with_ok_cancel_button_1);
 
-    // 显示警告图标
+    // 警告图标
     qicon_warning_icon->addAction(with_ok_button_48);
-    qicon_warning_icon->addAction(with_ok_button_49);
+    qicon_warning_icon->addAction(with_ok_cancel_button_49);
+
+    // 信息图标
+    qicon_info_icon->addAction(with_ok_button_64);
+    qicon_info_icon->addAction(with_ok_cancel_button_65);
 
     /* 将子菜单绑定 */
-    no_icon->setMenu(qicon_no_icon);
-    warning_icon->setMenu(qicon_warning_icon);
+    no_icon->setMenu(qicon_no_icon); // 无图标
+    warning_icon->setMenu(qicon_warning_icon); // 警告图标
+    info_icon->setMenu(qicon_info_icon); // 信息图标
 
     /* 绑定子菜单函数 */
     // 无图标
@@ -58,7 +70,11 @@ void MessageboxCreator::createMenu() { // 创建菜单
 
     // 显示警告图标
     connect(with_ok_button_48, &QAction::triggered, this, &MessageboxCreator::warning_icon_with_ok_button);
-    connect(with_ok_button_49, &QAction::triggered, this, &MessageboxCreator::warning_icon_with_ok_cancel_button);
+    connect(with_ok_cancel_button_49, &QAction::triggered, this, &MessageboxCreator::warning_icon_with_ok_cancel_button);
+
+    // 显示信息图标
+    connect(with_ok_button_64, &QAction::triggered, this, &MessageboxCreator::info_icon_with_ok_button);
+    connect(with_ok_cancel_button_65, &QAction::triggered, this, &MessageboxCreator::info_icon_with_ok_cancel_button);
 
     /* 将菜单绑定到 pushButton_4 上 */
     ui->pushButton_4->setMenu(qicon_bar);
@@ -118,12 +134,12 @@ void MessageboxCreator::on_pushButton_clicked() // 创建
 
 void MessageboxCreator::on_pushButton_2_clicked() // 取消
 {
-    QApplication *app = nullptr;
+    QApplication* app = nullptr;
     app->quit();
 }
 
 
-void MessageboxCreator::on_pushButton_3_clicked() // 路径选择
+void MessageboxCreator::on_toolButton_clicked() // 路径选择
 {
     QString path = QFileDialog::getExistingDirectory(this, "选择生成目录", "./", QFileDialog::ShowDirsOnly);
     ui->lineEdit_4->setText(path);
@@ -131,7 +147,7 @@ void MessageboxCreator::on_pushButton_3_clicked() // 路径选择
 
 /* 菜单栏 */
 void MessageboxCreator::aboutMenu() { // 关于菜单
-    QMessageBox::information(this, "MessageboxCreator", "作者：Jerry\n版本：1.0\n这个程序可以帮你创建简单的弹窗文件");
+    QMessageBox::information(this, "MessageboxCreator", "作者：Jerry\n版本：1.0.1\n这个程序可以帮你创建简单的弹窗文件");
 }
 
 /* 图标参数候选项 */
@@ -150,3 +166,12 @@ void MessageboxCreator::warning_icon_with_ok_button() { // 显示警告图标并
 void MessageboxCreator::warning_icon_with_ok_cancel_button() { // 显示警告图标并提供[确认]、[取消]按钮
     ui->lineEdit_3->setText("49");
 }
+
+void MessageboxCreator::info_icon_with_ok_button() { // 显示信息图标并提供[确认]按钮
+    ui->lineEdit_3->setText("64");
+}
+
+void MessageboxCreator::info_icon_with_ok_cancel_button() { // 显示信息图标并提供[确认]、[取消]按钮
+    ui->lineEdit_3->setText("65");
+}
+
